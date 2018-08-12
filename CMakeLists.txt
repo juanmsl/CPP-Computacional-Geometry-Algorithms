@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 2.8)
+
+PROJECT("Line intersection")
+set(CMAKE_BUILD_TYPE Debug)
+
+set(APP_TYPE "" CACHE STRING "Executable linking." FORCE)
+if(APPLE)
+    set(APP_TYPE "MACOSX_BUNDLE" CACHE STRING "Executable linking." FORCE)
+    set(CMAKE_MACOSX_RPATH true CACHE BOOL "Use RPATH's on MacOSX." FORCE)
+mark_as_advanced(CMAKE_MACOSX_RPATH)
+elseif(WIN32)
+    set(APP_TYPE "WIN32" CACHE STRING "Executable linking." FORCE)
+endif(APPLE)
+mark_as_advanced(APP_TYPE)
+
+set(CMAKE_CXX_STANDARD 11)
+
+if(PROJECT_BINARY_DIR STREQUAL ${PROJECT_SOURCE_DIR})
+    message(FATAL_ERROR "Building in the source tree is not allowed.")
+endif(PROJECT_BINARY_DIR STREQUAL ${PROJECT_SOURCE_DIR})
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+mark_as_advanced(
+    CMAKE_BACKWARDS_COMPATIBILITY
+    EXECUTABLE_OUTPUT_PATH
+    LIBRARY_OUTPUT_PATH
+)
+
+subdirs(lib src)
+
+set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
