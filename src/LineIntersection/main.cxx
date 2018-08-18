@@ -11,7 +11,7 @@ void sendPointsToFile(const std::string& filename, PointCollec_2 points);
 
 int main(int argc, char *argv[]) {
 
-  if(argc != 4) {
+  if(argc != 3) {
     std::cerr << "Usage: " << argv[0] << " inputFile outputFile" << std::endl;
     exit(1);
   }
@@ -38,8 +38,11 @@ long getTime() {
 SegmentCollec_2 getLinesFromFile(const char *filename) {
   std::ifstream input(filename);
   SegmentCollec_2 lines;
+  int n;
 
-  while(!input.eof()) {
+  input >> n;
+
+  for(int i = 0; i < n; i++) {
     double x_a, x_b;
     double y_a, y_b;
 

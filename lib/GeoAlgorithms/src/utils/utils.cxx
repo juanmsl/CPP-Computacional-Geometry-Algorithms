@@ -80,3 +80,30 @@ PointCollec_2 ch::mergeConvexHull(const PointCollec_2& a, const PointCollec_2& b
 
   return convex;
 }
+
+Point_2 ch::intersect(const Segment_2 &a, const Segment_2 &b) {
+  Point_2 A = a[0];
+  Point_2 B = a[1];
+  Point_2 C = b[0];
+  Point_2 D = b[1];
+
+  // Line AB represented as a1x + b1y = c1
+  double a1 = B.y() - A.y();
+  double b1 = A.x() - B.x();
+  double c1 = a1*(A.x()) + b1*(A.y());
+
+  // Line CD represented as a2x + b2y = c2
+  double a2 = D.y() - C.y();
+  double b2 = C.x() - D.x();
+  double c2 = a2*(C.x())+ b2*(C.y());
+
+  double determinant = a1*b2 - a2*b1;
+
+  if (determinant == 0) {
+    return Point_2(999999, 999999);
+  }
+
+  double x = (b2*c1 - b1*c2)/determinant;
+  double y = (a1*c2 - a2*c1)/determinant;
+  return Point_2(x, y);
+}

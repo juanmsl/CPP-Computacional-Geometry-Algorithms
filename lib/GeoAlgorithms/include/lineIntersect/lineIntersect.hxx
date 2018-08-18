@@ -2,6 +2,10 @@
 #define LINEINTERSECT_HXX
 
 #include <typedef/types.hxx>
+#include <utils/utils.hxx>
+#include <algorithm>
+#include <map>
+#include <set>
 
 namespace li {
 

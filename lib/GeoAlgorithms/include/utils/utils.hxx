@@ -9,6 +9,7 @@ namespace ch {
   bool isInTheLeft(const Point_2 a, const Point_2 p, const Point_2 q);
   PointCollec_2 sortConvexHullEdges(const SegmentCollec_2& convexHull);
   PointCollec_2 mergeConvexHull(const PointCollec_2& a, const PointCollec_2& b);
+  Point_2 intersect(const Segment_2& a, const Segment_2& b);
 
 }
 
