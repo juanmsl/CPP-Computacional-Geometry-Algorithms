@@ -2,6 +2,7 @@
 
 PointCollec_2 li::getIntersections(const SegmentCollec_2& lines) {
   PointCollec_2 intersections;
+  std::set<Point_2 > setIntersections;
   std::multimap<Point_2, int, compPoint> points;
   StatusThree candidatePoints;
   std::vector<bool> isCandidate(lines.size(), false);
@@ -29,12 +30,16 @@ PointCollec_2 li::getIntersections(const SegmentCollec_2& lines) {
 
       if(before != candidatePoints.end()) {
         if(lineIndex != before->second && CGAL::do_intersect(lines[lineIndex], lines[before->second])) {
-          std::cout << "Intersection  in: " << lineIndex << " " << before->second << " = " << ch::intersect(lines[lineIndex], lines[before->second]) << std::endl;
+          Point_2 p = ch::intersect(lines[lineIndex], lines[before->second]);
+          std::cout << "Intersection  in: " << lineIndex << " " << before->second << " = " << p << std::endl;
+          setIntersections.emplace(p);
         }
       }
       if(after != candidatePoints.end()) {
         if(lineIndex != after->second && CGAL::do_intersect(lines[lineIndex], lines[after->second])) {
-          std::cout << "Intersection  in: " << lineIndex << " " << after->second << " = " << ch::intersect(lines[lineIndex], lines[after->second]) << std::endl;
+          Point_2 p = ch::intersect(lines[lineIndex], lines[after->second]);
+          std::cout << "Intersection  in: " << lineIndex << " " << after->second << " = " << p << std::endl;
+          setIntersections.emplace(p);
         }
       }
     }
@@ -46,13 +51,17 @@ PointCollec_2 li::getIntersections(const SegmentCollec_2& lines) {
 
       if(before != candidatePoints.end() && after != candidatePoints.end()) {
         if(lineIndex != before->second && lineIndex != after->second && before->second != after->second && CGAL::do_intersect(lines[before->second], lines[after->second])) {
-          std::cout << "Intersection out: " << before->second << " " << after->second << " = " << ch::intersect(lines[before->second], lines[after->second]) << std::endl;
+          Point_2 p = ch::intersect(lines[before->second], lines[after->second]);
+          std::cout << "Intersection out: " << before->second << " " << after->second << " = " << p << std::endl;
+          setIntersections.emplace(p);
         }
       }
 
       candidatePoints.erase(otherPair);
     }
   }
+
+  intersections.assign(setIntersections.begin(), setIntersections.end());
 
   return intersections;
 }
