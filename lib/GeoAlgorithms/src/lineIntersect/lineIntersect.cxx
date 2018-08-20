@@ -2,11 +2,9 @@
 
 PointCollec_2 li::getIntersections(const SegmentCollec_2& lines) {
   PointCollec_2 intersections;
-  std::set<Point_2> intersectionsSet;
-  std::vector<int> lineCandidates;
-  std::vector<bool> isCandidate(lines.size(), false);
   std::multimap<Point_2, int, compPoint> points;
-  std::multimap<Point_2, int> intersectionCandidates;
+  StatusThree candidatePoints;
+  std::vector<bool> isCandidate(lines.size(), false);
 
   for(int i = 0; i < lines.size(); i++) {
     Segment_2 line = lines[i];
@@ -14,85 +12,47 @@ PointCollec_2 li::getIntersections(const SegmentCollec_2& lines) {
     points.emplace(line[1], i);
   }
 
-  for(std::pair<Point_2, int> pair : points) {
-    Point_2 point = pair.first;
-    int lineIndex = pair.second;
+  for(StatusType current : points) {
+    Point_2 point = current.first;
+    int lineIndex = current.second;
     Segment_2 line = lines[lineIndex];
-    Segment_2 line_H(Point_2(0, point.y()), Point_2(10, point.y()));
-    std::multimap<Point_2, int> intersectionCandidatesAux;
+    Point_2 otherPoint = line[0] == point ? line[1] : line[0];
+    StatusType otherPair = std::make_pair(otherPoint, lineIndex);
 
-    /*
-     * Barrer line intersect all candidate lines
-     * */
-    int currentCandidateIndex = -1;
-    for(int i = 0; i < lineCandidates.size(); i++) {
-      int candidateLineIndex = lineCandidates[i];
-      Segment_2 candidateLine = lines[candidateLineIndex];
-      Point_2 intersection = ch::intersect(candidateLine, line_H);
-      intersectionCandidatesAux.emplace(intersection, candidateLineIndex);
+    isCandidate[lineIndex] = !isCandidate[lineIndex];
 
-      if(candidateLineIndex == lineIndex) {
-        currentCandidateIndex = i;
-      }
-    }
-
-    std::vector<int> before;
-    std::vector<int> after;
-    std::cout << "antes: (" << point << ")" << lineIndex << ": ";
-    for(std::pair<Point_2, int> intersection : intersectionCandidates) {
-      before.push_back(intersection.second);
-      std::cout << intersection.second << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "ahora (" << point << ")" << lineIndex << ": ";
-    for(std::pair<Point_2, int> intersection : intersectionCandidatesAux) {
-      after.push_back(intersection.second);
-      std::cout << intersection.second << " ";
-    }
-    std::cout << std::endl;
-
-    for(int i = 0; i < before.size(); i++) {
-      if(before[i] != after[i]) {
-        std::cout << "interseccion" << std::endl;
-
-        int beforeIndex = (i - 1) % after.size();
-        int afterIndex = (i + 1) % after.size();
-
-        Point_2 intersection = ch::intersect(lines[before[i]], lines[after[i]]);
-        intersectionsSet.insert(intersection);
-
-        if(before[i] != after[beforeIndex]) {
-          intersection = ch::intersect(lines[before[i]], lines[after[beforeIndex]]);
-          intersectionsSet.insert(intersection);
-        }
-        if(before[i] != after[afterIndex]) {
-          intersection = ch::intersect(lines[before[i]], lines[after[afterIndex]]);
-          intersectionsSet.insert(intersection);
-        }
-      }
-    }
-
-    /*
-     * If current point is end point
-     * */
     if(isCandidate[lineIndex]) {
-      isCandidate[lineIndex] = false;
-      lineCandidates.erase(lineCandidates.begin() + currentCandidateIndex);
-      intersectionCandidatesAux.erase(point);
-    } else {
-      isCandidate[lineIndex] = true;
-      lineCandidates.push_back(lineIndex);
-      intersectionCandidatesAux.emplace(point, lineIndex);
+      candidatePoints.emplace(current);
+
+      StatusThree::iterator after = ch::getAfter(candidatePoints, current);
+      StatusThree::iterator before = ch::getBefore(candidatePoints, current);
+
+      if(before != candidatePoints.end()) {
+        if(lineIndex != before->second && CGAL::do_intersect(lines[lineIndex], lines[before->second])) {
+          std::cout << "Intersection  in: " << lineIndex << " " << before->second << " = " << ch::intersect(lines[lineIndex], lines[before->second]) << std::endl;
+        }
+      }
+      if(after != candidatePoints.end()) {
+        if(lineIndex != after->second && CGAL::do_intersect(lines[lineIndex], lines[after->second])) {
+          std::cout << "Intersection  in: " << lineIndex << " " << after->second << " = " << ch::intersect(lines[lineIndex], lines[after->second]) << std::endl;
+        }
+      }
     }
 
-    intersectionCandidates = std::multimap<Point_2, int>(intersectionCandidatesAux);
-  }
+    if(!isCandidate[lineIndex]) {
 
-  for(Point_2 inter : intersectionsSet) {
-    std::cout << inter << std::endl;
-  }
+      StatusThree::iterator after = ch::getAfter(candidatePoints, otherPair);
+      StatusThree::iterator before = ch::getBefore(candidatePoints, otherPair);
 
-  intersections.assign(intersectionsSet.begin(), intersectionsSet.end());
+      if(before != candidatePoints.end() && after != candidatePoints.end()) {
+        if(lineIndex != before->second && lineIndex != after->second && before->second != after->second && CGAL::do_intersect(lines[before->second], lines[after->second])) {
+          std::cout << "Intersection out: " << before->second << " " << after->second << " = " << ch::intersect(lines[before->second], lines[after->second]) << std::endl;
+        }
+      }
+
+      candidatePoints.erase(otherPair);
+    }
+  }
 
   return intersections;
 }

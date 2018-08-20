@@ -10,6 +10,7 @@
 namespace li {
 
   PointCollec_2 getIntersections(const SegmentCollec_2& lines);
+  void printCandidate(const StatusThree& candidates, const SegmentCollec_2& lines);
 
 }
 

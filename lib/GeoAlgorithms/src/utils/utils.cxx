@@ -100,10 +100,20 @@ Point_2 ch::intersect(const Segment_2 &a, const Segment_2 &b) {
   double determinant = a1*b2 - a2*b1;
 
   if (determinant == 0) {
-    return Point_2(999999, 999999);
+    return Point_2(INF, INF);
   }
 
   double x = (b2*c1 - b1*c2)/determinant;
   double y = (a1*c2 - a2*c1)/determinant;
   return Point_2(x, y);
+}
+
+StatusThree::iterator ch::getBefore(const StatusThree &statusThree, const StatusType &element) {
+  StatusThree::iterator iterator = --statusThree.lower_bound(element);
+  return iterator;
+}
+
+StatusThree::iterator ch::getAfter(const StatusThree &statusThree, const StatusType &element) {
+  StatusThree::iterator iterator = statusThree.upper_bound(element);
+  return iterator;
 }
