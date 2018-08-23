@@ -23,40 +23,16 @@ PointCollec_2 li::getIntersections(const SegmentCollec_2& lines) {
     isCandidate[lineIndex] = !isCandidate[lineIndex];
 
     if(isCandidate[lineIndex]) {
+      for(StatusType candidate : candidatePoints) {
+        if(CGAL::do_intersect(line, lines[candidate.second])) {
+          Point_2 p = ch::intersect(line, lines[candidate.second]);
+          std::cout << "Intersection  in: " << lineIndex << " " << candidate.second << " = " << p << std::endl;
+          setIntersections.emplace(p);
+        }
+      }
+
       candidatePoints.emplace(current);
-
-      StatusThree::iterator after = ch::getAfter(candidatePoints, current);
-      StatusThree::iterator before = ch::getBefore(candidatePoints, current);
-
-      if(before != candidatePoints.end()) {
-        if(lineIndex != before->second && CGAL::do_intersect(lines[lineIndex], lines[before->second])) {
-          Point_2 p = ch::intersect(lines[lineIndex], lines[before->second]);
-          std::cout << "Intersection  in: " << lineIndex << " " << before->second << " = " << p << std::endl;
-          setIntersections.emplace(p);
-        }
-      }
-      if(after != candidatePoints.end()) {
-        if(lineIndex != after->second && CGAL::do_intersect(lines[lineIndex], lines[after->second])) {
-          Point_2 p = ch::intersect(lines[lineIndex], lines[after->second]);
-          std::cout << "Intersection  in: " << lineIndex << " " << after->second << " = " << p << std::endl;
-          setIntersections.emplace(p);
-        }
-      }
-    }
-
-    if(!isCandidate[lineIndex]) {
-
-      StatusThree::iterator after = ch::getAfter(candidatePoints, otherPair);
-      StatusThree::iterator before = ch::getBefore(candidatePoints, otherPair);
-
-      if(before != candidatePoints.end() && after != candidatePoints.end()) {
-        if(lineIndex != before->second && lineIndex != after->second && before->second != after->second && CGAL::do_intersect(lines[before->second], lines[after->second])) {
-          Point_2 p = ch::intersect(lines[before->second], lines[after->second]);
-          std::cout << "Intersection out: " << before->second << " " << after->second << " = " << p << std::endl;
-          setIntersections.emplace(p);
-        }
-      }
-
+    } else {
       candidatePoints.erase(otherPair);
     }
   }
