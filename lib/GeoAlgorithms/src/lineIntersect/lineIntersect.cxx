@@ -26,7 +26,7 @@ PointCollec_2 li::getIntersections(const SegmentCollec_2& lines) {
       for(StatusType candidate : candidatePoints) {
         if(CGAL::do_intersect(line, lines[candidate.second])) {
           Point_2 p = ch::intersect(line, lines[candidate.second]);
-          std::cout << "Intersection  in: " << lineIndex << " " << candidate.second << " = " << p << std::endl;
+          std::cout << "Intersection line " << lineIndex << " with line " << candidate.second << ": " << p << std::endl;
           setIntersections.emplace(p);
         }
       }
