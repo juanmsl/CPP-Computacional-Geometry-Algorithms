@@ -9,7 +9,7 @@ namespace ch {
 
   namespace iterative {
 
-    PointCollec_2 convexHull(PointCollec_2 points);
+    PointsVector convexHull(PointsVector points);
 
   }
 

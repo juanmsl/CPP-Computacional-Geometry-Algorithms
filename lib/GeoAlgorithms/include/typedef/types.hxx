@@ -6,23 +6,24 @@
 #include <set>
 #include <limits>
 
-
-const double INF = std::numeric_limits<double>::max();
+const double MAXIMUN = std::numeric_limits<double>::max();
+const double MINIMUN = std::numeric_limits<double>::min();
 
 typedef CGAL::Simple_cartesian<double> Kernel;
-typedef Kernel::Point_2 Point_2;
-typedef Kernel::Segment_2 Segment_2;
-typedef std::vector<Point_2> PointCollec_2;
-typedef std::vector<Segment_2 > SegmentCollec_2;
-typedef std::pair<Point_2, int> StatusType;
-typedef std::set<StatusType> StatusThree;
+typedef Kernel::Point_2 Point;
+typedef Kernel::Segment_2 SegmentLine;
 
+typedef std::vector<Point> PointsVector;
+typedef PointsVector::iterator PointsVectorIterator;
+typedef PointsVector::const_iterator PointsVectorConstIterator;
+typedef PointsVector::reverse_iterator PointsVectorReverseIterator;
+typedef PointsVector::const_reverse_iterator PointsVectorConstReverseIterator;
 
-struct compPoint {
-  bool operator() (const Point_2& a, const Point_2& b) const {
-    if(a.y() == b.y()) return a.x() < b.x();
-    return b.y() < a.y();
-  }
-};
+typedef std::vector<SegmentLine> SegmentLinesVector;
+typedef SegmentLinesVector::iterator SegmentLinesVectorIterator;
+typedef SegmentLinesVector::const_iterator SegmentLinesVectorConstIterator;
+typedef SegmentLinesVector::reverse_iterator SegmentLinesVectorReverseIterator;
+typedef SegmentLinesVector::const_reverse_iterator SegmentLinesVectorConstReverseIterator;
+
 
 #endif

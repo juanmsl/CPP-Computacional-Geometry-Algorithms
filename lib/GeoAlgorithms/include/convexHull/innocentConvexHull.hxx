@@ -8,7 +8,7 @@ namespace ch {
 
   namespace innocent {
 
-    PointCollec_2 convexHull(const PointCollec_2& points);
+    PointsVector convexHull(const PointsVector& points);
 
   }
 

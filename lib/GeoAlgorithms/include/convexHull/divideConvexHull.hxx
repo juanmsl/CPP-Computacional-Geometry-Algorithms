@@ -10,8 +10,8 @@ namespace ch {
 
   namespace divide {
 
-    PointCollec_2 convexHull(const PointCollec_2& points);
-    PointCollec_2 convexHullDivide(const PointCollec_2& points, int l, int j);
+    PointsVector convexHull(const PointsVector& points);
+    PointsVector convexHullDivide(const PointsVector& points, int l, int j);
 
   }
 

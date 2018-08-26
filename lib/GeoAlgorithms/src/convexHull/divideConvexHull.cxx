@@ -1,14 +1,14 @@
 #include <convexHull/divideConvexHull.hxx>
 
-PointCollec_2 ch::divide::convexHull(const PointCollec_2& points) {
-  PointCollec_2 convexHull;
+PointsVector ch::divide::convexHull(const PointsVector& points) {
+  PointsVector convexHull;
   convexHull = convexHullDivide(points, 0, points.size());
   return convexHull;
 }
 
-PointCollec_2 ch::divide::convexHullDivide(const PointCollec_2& points, int l, int r) {
+PointsVector ch::divide::convexHullDivide(const PointsVector& points, int l, int r) {
   int elements = r - l;
-  PointCollec_2 convexHull;
+  PointsVector convexHull;
 
   if(elements < 5) {
     for(int i = l; i < r; i++) {
@@ -18,8 +18,8 @@ PointCollec_2 ch::divide::convexHullDivide(const PointCollec_2& points, int l, i
   } else {
     int m = (l + r) / 2;
 
-    PointCollec_2 ch_a = convexHullDivide(points, l, m);
-    PointCollec_2 ch_b = convexHullDivide(points, m, r);
+    PointsVector ch_a = convexHullDivide(points, l, m);
+    PointsVector ch_b = convexHullDivide(points, m, r);
 
     convexHull = mergeConvexHull(ch_a, ch_b);
   }

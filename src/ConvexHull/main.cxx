@@ -8,8 +8,8 @@
 #include <convexHull/divideConvexHull.hxx>
 
 long getTime();
-PointCollec_2 getPointsFromFile(const char *filename);
-void sendPointsToFile(std::string filename, PointCollec_2 points);
+PointsVector getPointsFromFile(const char *filename);
+void sendPointsToFile(std::string filename, PointsVector points);
 
 int main(int argc, char *argv[]) {
 
@@ -20,11 +20,11 @@ int main(int argc, char *argv[]) {
 
   std::string type = std::string(argv[1]);
 
-  PointCollec_2 points = getPointsFromFile(argv[2]);
+  PointsVector points = getPointsFromFile(argv[2]);
   std::string filename = std::string(argv[3]);
   long init = 0;
   long end = 0;
-  PointCollec_2 convexHull;
+  PointsVector convexHull;
 
   if(type == "innocent") {
 
@@ -63,9 +63,9 @@ long getTime() {
 }
 
 
-PointCollec_2 getPointsFromFile(const char *filename) {
+PointsVector getPointsFromFile(const char *filename) {
   std::ifstream input(filename);
-  PointCollec_2 points;
+  PointsVector points;
 
   while(!input.eof()) {
     double x;
@@ -73,7 +73,7 @@ PointCollec_2 getPointsFromFile(const char *filename) {
 
     input >> x >> y;
 
-    Point_2 point(x, y);
+    Point point(x, y);
     points.push_back(point);
   }
 
@@ -81,10 +81,10 @@ PointCollec_2 getPointsFromFile(const char *filename) {
   return points;
 }
 
-void sendPointsToFile(std::string filename, PointCollec_2 points) {
+void sendPointsToFile(std::string filename, PointsVector points) {
   std::ofstream output(filename.c_str());
 
-  for(Point_2 point : points) {
+  for(Point point : points) {
     output << point.x() << "," << point.y() << std::endl;
   }
 

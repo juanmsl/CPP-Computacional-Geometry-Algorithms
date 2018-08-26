@@ -6,8 +6,8 @@
 #include <lineIntersect/lineIntersect.hxx>
 
 long getTime();
-SegmentCollec_2 getLinesFromFile(const char *filename);
-void sendPointsToFile(const std::string& filename, PointCollec_2 points);
+SegmentLinesVector getLinesFromFile(const char *filename);
+void sendPointsToFile(const std::string& filename, PointsVector points);
 
 int main(int argc, char *argv[]) {
 
@@ -16,11 +16,11 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  SegmentCollec_2 lines = getLinesFromFile(argv[1]);
+  SegmentLinesVector lines = getLinesFromFile(argv[1]);
   std::string filename = std::string(argv[2]);
 
   long init = getTime();
-  PointCollec_2 intersections = li::getIntersections(lines);
+  PointsVector intersections = li::getIntersections(lines);
   long end = getTime();
 
   sendPointsToFile(filename + ".csv", intersections);
@@ -35,9 +35,9 @@ long getTime() {
 }
 
 
-SegmentCollec_2 getLinesFromFile(const char *filename) {
+SegmentLinesVector getLinesFromFile(const char *filename) {
   std::ifstream input(filename);
-  SegmentCollec_2 lines;
+  SegmentLinesVector lines;
   int n;
 
   input >> n;
@@ -48,9 +48,9 @@ SegmentCollec_2 getLinesFromFile(const char *filename) {
 
     input >> x_a >> y_a >> x_b >> y_b;
 
-    Point_2 a(x_a, y_a);
-    Point_2 b(x_b, y_b);
-    Segment_2 segment(a, b);
+    Point a(x_a, y_a);
+    Point b(x_b, y_b);
+    SegmentLine segment(a, b);
     lines.push_back(segment);
   }
 
@@ -58,10 +58,10 @@ SegmentCollec_2 getLinesFromFile(const char *filename) {
   return lines;
 }
 
-void sendPointsToFile(const std::string& filename, PointCollec_2 points) {
+void sendPointsToFile(const std::string& filename, PointsVector points) {
   std::ofstream output(filename.c_str());
 
-  for(Point_2 point : points) {
+  for(Point point : points) {
     output << point.x() << "," << point.y() << std::endl;
   }
 

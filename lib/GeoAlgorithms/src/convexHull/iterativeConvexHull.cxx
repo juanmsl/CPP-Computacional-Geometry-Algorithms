@@ -1,7 +1,7 @@
 #include <convexHull/iterativeConvexHull.hxx>
 
-PointCollec_2 ch::iterative::convexHull(PointCollec_2 points) {
-  PointCollec_2 convexHull;
+PointsVector ch::iterative::convexHull(PointsVector points) {
+  PointsVector convexHull;
 
   std::sort(points.begin(), points.end());
 
@@ -12,9 +12,9 @@ PointCollec_2 ch::iterative::convexHull(PointCollec_2 points) {
     convexHull.push_back(points[i]);
 
     long lastIndex = convexHull.size() - 1;
-    Point_2 p = convexHull[lastIndex - 2];
-    Point_2 q = convexHull[lastIndex - 1];
-    Point_2 a = convexHull[lastIndex - 0];
+    Point p = convexHull[lastIndex - 2];
+    Point q = convexHull[lastIndex - 1];
+    Point a = convexHull[lastIndex - 0];
 
     if(a == q) {
       convexHull.erase(convexHull.end() - 1);
@@ -38,9 +38,9 @@ PointCollec_2 ch::iterative::convexHull(PointCollec_2 points) {
     convexHull.push_back(points[i]);
 
     long lastIndex = convexHull.size() - 1;
-    Point_2 p = convexHull[lastIndex - 2];
-    Point_2 q = convexHull[lastIndex - 1];
-    Point_2 a = convexHull[lastIndex - 0];
+    Point p = convexHull[lastIndex - 2];
+    Point q = convexHull[lastIndex - 1];
+    Point a = convexHull[lastIndex - 0];
 
     if(a == q) {
       convexHull.erase(convexHull.end() - 1);
