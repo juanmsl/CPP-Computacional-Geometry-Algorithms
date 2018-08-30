@@ -26,13 +26,13 @@ int main(int argc, char *argv[]) {
   if(polygon.is_simple()) {
 
     CGAL::y_monotone_partition_2(polygon.vertices_begin(), polygon.vertices_end(), std::back_inserter(polygons));
+    Triangulation::getSubMononotonePolygons(p);
 
     int i = 0;
     for(Polygon p : polygons) {
       SegmentLinesVector subDiagonalds = Triangulation::triangulateMonotonePolygon(p);
       diagonals.insert(diagonals.end(), subDiagonalds.begin(), subDiagonalds.end());
       std::cout << ++i << std::endl;
-      Triangulation::getSubMononotonePolygons(p);
     }
 
   }

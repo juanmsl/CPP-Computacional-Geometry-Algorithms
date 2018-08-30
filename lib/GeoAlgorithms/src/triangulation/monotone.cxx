@@ -73,6 +73,9 @@ SegmentLinesVector Triangulation::triangulateMonotonePolygon(const Polygon &poly
 void Triangulation::getSubMononotonePolygons(const Polygon &polygon) {
 
   std::map<Point, int, CompPoints> vertices;
+  std::map<SegmentLine, Point, CompPoints> helpers;
+
+
   for(Point p : polygon.container()) {
     vertices.emplace(p, REGULAR);
   }
@@ -110,4 +113,10 @@ void Triangulation::getSubMononotonePolygons(const Polygon &polygon) {
     vertices[*it2] = (it1->x() >= it2->x()) ? START : SPLIT;
   }
 
+  for(std::pair<Point, int> p : vertices) {
+
+    if(p.second == START) {
+      polygon.eg
+    }
+  }
 }
